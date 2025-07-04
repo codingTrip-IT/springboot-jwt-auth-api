@@ -35,3 +35,16 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Spring Boot 설정
+application.yml
+application.properties
+application-*.yml
+application-*.properties
+
+# 환경 변수
+.env
+*.env
+
+# 민감한 설정 파일 (Firebase, AWS 등)
+*.json
