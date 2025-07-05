@@ -26,7 +26,7 @@ public class AuthService {
     @Transactional
     public SignupResponse registerUser(SignupRequest request) {
 
-        validateDuplicateUser(request.getUsername(), UserRole.ROLE_USER);
+        validateDuplicateUser(request.getUsername());
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
 
@@ -55,22 +55,23 @@ public class AuthService {
     }
 
     public UserRoleUpdateResponse grantAdminRole(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new JwtAuthException(UserErrorCode.USER_NOT_FOUND)
+        );
 
         user.updateRole(UserRole.ROLE_ADMIN);  // enum 값
         return UserRoleUpdateResponse.from(user);
     }
 
 
-    private void validateDuplicateUser(String username, UserRole role) {
-        if (existsUser(username, role)) {
+    private void validateDuplicateUser(String username) {
+        if (existsUser(username)) {
             throw new JwtAuthException(AuthErrorCode.DUPLICATED_USERNAME);
         }
     }
 
-    public boolean existsUser(String username, UserRole role) {
-        return userRepository.existsByUsernameAndRole(username, role);
+    public boolean existsUser(String username) {
+        return userRepository.existsByUsername(username);
     }
 
     private void validatePassword(String password, String encodedPassword) {
