@@ -22,6 +22,7 @@ import java.util.Collections;
 		version = "1.0.0"
 	),
 	servers = {
+		@Server(url = "http://3.35.225.38:8080", description = "개발 서버"),
 		@Server(url = "http://localhost:8080", description = "로컬 서버")
 	}
 )
