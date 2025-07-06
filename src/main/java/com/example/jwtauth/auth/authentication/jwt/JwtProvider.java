@@ -48,6 +48,7 @@ public class JwtProvider {
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(this.signingKey)
+                .setAllowedClockSkewSeconds(60) // 60초 허용
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
